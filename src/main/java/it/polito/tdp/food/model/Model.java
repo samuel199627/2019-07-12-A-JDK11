@@ -26,24 +26,32 @@ public class Model {
 		FoodDao dao = new FoodDao() ;
 		this.cibi = dao.getFoodsByPortions(portions) ;
 
-		// Crea un grafo nuovo e vuoto
+		// Crea un grafo nuovo e vuoto: semplice, pesato e non orientato.
 		this.graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class) ;
 
-		// Aggiungi i vertici
+		// Aggiungi i vertici che sono i Food che hanno superato il filtraggio precedente dal database
 		Graphs.addAllVertices(this.graph, this.cibi) ;
 		
 		// Aggiungi gli archi
+		//l'arco lo aggiungo  se due cibi hanno almeno un ingradiente in comune (guardare dal controller la
+		//descrizione).
 		for(Food f1: this.cibi) {
 			for(Food f2: this.cibi) {
+				//controlliamo di non avere il cibo con se stesso e risparmiamo una query
+				//controllo anche di non scorrere nuovamente delle coppie ordinate al contrario
+				//che sarebbero inutili in quanto l'arco serve non orientato.
 				if(!f1.equals(f2) && f1.getFood_code()<f2.getFood_code()) {
 					Double peso = dao.calorieCongiunte(f1, f2) ;
+					//la query ha restituito qualcosa
 					if(peso!=null) {
+						//aggiungiamo l'arco con il relativo peso
 						Graphs.addEdge(this.graph, f1, f2, peso) ;
 					}
 				}
 			}
 		}
-		System.out.println(this.graph) ;
+		//anche se il grafo e' pesato, nella stampa non stampa il peso degli archi
+		//System.out.println(this.graph) ;
 		
 		return this.cibi ;
 	}
@@ -62,13 +70,16 @@ public class Model {
 		
 		List<FoodCalories> result = new ArrayList<>() ;
 		
+		//restituiamo tutti i vicini con il mio vertice in parametro
 		List<Food> vicini = Graphs.neighborListOf(this.graph, f) ;
 		
 		for(Food v: vicini) {
+			//this.graph.getEdge(f, v) arco da cui devo estrarre il peso
 			Double calorie = this.graph.getEdgeWeight(this.graph.getEdge(f, v)) ;
 			result.add(new FoodCalories(v, calorie)) ;
 		}
-		
+		//ordine del Comparator definito nella classe che ci siamo creati apposa
+		//FoodCalories
 		Collections.sort(result);
 		
 		return result ;

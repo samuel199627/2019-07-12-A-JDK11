@@ -151,7 +151,21 @@ public class FoodDao {
 		}
 
 	}
-
+	/*
+		Per l'arco devo prendere due cibi  diversi e verificare che abbiano almeno un ingradiente in comune
+	 	e questo lo faccio prendendo la tabella food condiment in join con se stessa. Il peso dell'arco 
+	 	e' il valore medio del campo calorie degli ingredienti in comune tra i due cibi e quindi mettiamo
+	 	ancora in join la tabella degli ingredienti per estrarre le calorie e facciamo la media con AVG 
+	 	direttamente dal database dato che non ci sono altri ragionamenti dietro. Raggruppo per la coppia di
+	 	cibi e cosi' mi crea il gruppo sulla coppia di cibi con in ogni riga la coppia e il singolo ingradiente
+	 	in comune di cui estraggo le calorie di cui calcolo direttamente la media.
+	 	
+	 	Per la query avrei anche potuto farmi restituire tutte le possibili connessioni tra cibi con relativi pesi
+	 	e poi le avrei filtrate solo sui cibi che avevo il precedente e in questa maniera avrei richiamato una sola
+	 	volta la query. In questa maniera, per ogni coppia di cibo andiamo a cercare la risposta. Con 6 porzioni 
+	 	abbiamo in effetti solo una ventina di vertici e quindi richiamiamo un numero di query ragionevoli.
+	 	Notare che questa query restituisce o riga oppure nulla.
+ 	*/
 	public Double calorieCongiunte(Food f1, Food f2) {
 		String sql = "SELECT fc1.food_code, fc2.food_code,  " + 
 				"		 AVG(condiment.condiment_calories) AS cal " + 
@@ -174,6 +188,7 @@ public class FoodDao {
 			ResultSet res = st.executeQuery() ;
 			
 			Double calories = null ;
+			//res.first() controlla se c'e' una prima riga ed entra nell'if
 			if(res.first()) {
 				calories = res.getDouble("cal") ;
 			}

@@ -3,8 +3,8 @@ package it.polito.tdp.food.model;
 public class Event implements Comparable<Event>{
 	
 	public enum EventType {
-		INIZIO_PREPARAZIONE, // viene assegnato un cibo ad una stazione
-		FINE_PREPARAZIONE, // la stazione ha completato la prep. di un cibo
+		INIZIO_PREPARAZIONE, // evento in cui viene assegnato un cibo ad una stazione
+		FINE_PREPARAZIONE, // evento in cui la stazione ha completato la preparazione di un cibo
 	}
 
 	private Double time ; // tempo in minuti
