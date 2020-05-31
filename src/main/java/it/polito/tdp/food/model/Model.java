@@ -19,7 +19,10 @@ public class Model {
 	public Model() {
 	}
 	
+	//restituisce i cibi per il primo punto dell'esame che restituisce i cibi che si servono
+	//nel numero di porzioni che sono passate come parametro
 	public List<Food> getFoods(int portions) {
+		//l'avrei creata nel costruttore, ma non cambia molto
 		FoodDao dao = new FoodDao() ;
 		this.cibi = dao.getFoodsByPortions(portions) ;
 

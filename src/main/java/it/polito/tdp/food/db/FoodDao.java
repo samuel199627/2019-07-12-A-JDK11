@@ -13,6 +13,15 @@ import it.polito.tdp.food.model.Portion;
 
 public class FoodDao {
 	
+	//per selezionare i cibi che si presentano esattamente nel numero di porzioni che abbiamo inserito
+	//come parametro.
+	//Notare come e' stato usato L'HAVING COUNT che ha usato invece HAVING con il nome della colonna
+	//del count che si e' creato ed e' intelligente. Provare anche con HAVING COUNT, ma penso che sia
+	//assolutamente analogo. Confermo che e' uguale come procedura.
+	//Notare come la tabella portion e' inserita tra non i classici apici per inserimenti di stringa
+	//ma sono apici roversciati e questo perche' portion e' una parola chiave di SQL e inserita tra quegli
+	//apici possiamo dire ad SQL che non vogliamo la parola chiave, ma e' una nostra parola che in questo 
+	//caso ci serve per essere il nome della tabella del dataset.
 	public List<Food> getFoodsByPortions(int portions) {
 		String sql = "SELECT food.food_code, food.display_name, COUNT(DISTINCT portion.portion_id) AS CNT " + 
 				"FROM food, `portion` " + 

@@ -20,6 +20,27 @@ import javafx.scene.control.TextField;
 
 //Importato
 
+/*
+ 	
+ 	Lavoriamo con un dataset relativo al cibo. Rappresenta un modo per rappresentare le calorie
+ 	nei cibi. Ciascun cibo puo' essere servito in porzioni differenti (anche solo una).
+ 	
+ 	Abbiamo una tabella che rappresenta tutti i condimenti che vanno a costruire tutti i tipi di cibo
+ 	e quindi una tabella che 
+ 	
+ 	Il primo passo devo inserire un numero che rappresenta un numero di porzioni e devo restituire i 
+ 	cibi che si possono presentare esattamente in quel numero di variante di porzioni. Metto in 
+ 	relazione la tabella food con quella portion e per ogni cibo conto in quante porzioni viene servito.
+ 	Il numero di cibi restituiti e' ristretto con 6 o 7 porzioni e quindi il grafo creato sara' abbastanza
+ 	piccolo quanto ci serve per lavorare in tranquillita'.
+ 	
+ 	Creo un grafo con i cibi che superano il primo filtraggio e creo un arco tra cibi se hanno almeno
+ 	un ingradiente in comune. Il grafo deve essere semplice, pesato e non orientato.
+ 	
+ 	
+ 	
+ */
+
 public class FoodController {
 
 	private Model model;
@@ -37,7 +58,7 @@ public class FoodController {
 	private TextField txtK; // Value injected by FXMLLoader
 
 	@FXML // fx:id="btnAnalisi"
-	private Button btnAnalisi; // Value injected by FXMLLoader
+	private Button btnAnalisi; // Quello che legge le porzioni e che crea il grafo
 
 	@FXML // fx:id="btnCalorie"
 	private Button btnCalorie; // Value injected by FXMLLoader
@@ -56,10 +77,13 @@ public class FoodController {
 		txtResult.clear();
 //    	txtResult.appendText("Creazione grafo...");
 		String porzioniStr = txtPorzioni.getText();
+		//cerchiamo di intercettare eventuali errori nell'inserimento di un numero
 		try {
 			int portions = Integer.parseInt(porzioniStr);
 			List<Food> cibi = model.getFoods(portions);
+			//pulisco da eventuali run precedenti il menu a tendina
 			boxFood.getItems().clear();
+			//popolo il menu a tendina
 			boxFood.getItems().addAll(cibi) ;
 			
 		} catch (NumberFormatException ex) {
